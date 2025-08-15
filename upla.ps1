@@ -1,5 +1,14 @@
 # UPDATE ALL LLAMAS IN REVERSE ALPHABETICAL ORDER BECAUSE OF OCD
 
+Write-Host "..red." -ForegroundColor Red
+Write-Host "...green." -ForegroundColor Green
+Write-Host "....cyan." -ForegroundColor Cyan
+Write-Host ".....yellow." -ForegroundColor Yellow
+Write-Host "-----ANSI-COLOR-TEST-----" -ForegroundColor Red
+
+Write-Host "YOU ARE USING POWERSHELL VERSION" -ForegroundColor Yellow
+$PSVersionTable.PSVersion
+
 function Update-OllamaModels {
     <#
     .SYNOPSIS
@@ -12,7 +21,7 @@ function Update-OllamaModels {
     Prompts the user for confirmation before updating the models.
 
     .EXAMPLE
-    powershell -ExecutionPolicy Bypass -File "C:\SDA1111\upla.ps1"
+    powershell -ExecutionPolicy Bypass -File "C:\rot\upla.ps1"
     #>
 
     [CmdletBinding()]
@@ -48,27 +57,32 @@ function Update-OllamaModels {
         if ($Confirm) {
             Write-Host "`nFound $($sortedModels.Count) model(s) that need updating:`n" -ForegroundColor Cyan
             $sortedModels | ForEach-Object { Write-Host "$_" }
-            $confirmation = Read-Host "`nDo you want to proceed with the updates? (Y/N)" -ForegroundColor Cyan
+            $confirmation = Read-Host "`nDo you want to proceed with the updates? (Y/N)"
 
             if ($confirmation.ToUpper() -ne 'Y') {
-                Write-Output "`nUpdate process cancelled by user." -ForegroundColor Red
+                Write-Host "`nUpdate process cancelled by user." -ForegroundColor Red
                 return
             }
         }
 
         Write-Host "`nUpdating models in reverse alphabetical order:`n" -ForegroundColor Cyan
 
+        $totalModels = $sortedModels.Count
+        $currentModel = 0
+
         foreach ($model in $sortedModels) {
+            $currentModel++
             try {
-                Write-Output "`nUpdating model: $model"
-                # Execute the 'ollama pull' command to update the model
-                ollama pull $model | ForEach-Object { Write-Host $_ -ForegroundColor Green }
-                Write-Output "--"
+                Write-Host "`nUpdating model: $model ($currentModel/$totalModels)" -ForegroundColor Green
+                # Execute the 'ollama pull' command to update the model and capture the output
+                $updateOutput = & ollama pull $model 2>&1
+                $updateOutput | ForEach-Object { Write-Host $_ -ForegroundColor Green }
+                Write-Host "--" -ForegroundColor Green
             } catch {
                 Write-Error "Failed to update model $model. Error: $_" -ForegroundColor Red
             }
         }
-        Write-Output "`nAll models have been processed.`n" -ForegroundColor Green
+        Write-Host "`nAll models have been Upgray.`n" -ForegroundColor Cyan
     } catch {
         Write-Error "An error occurred: $_" -ForegroundColor Red
     }
