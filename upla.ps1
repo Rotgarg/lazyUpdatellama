@@ -82,7 +82,7 @@ function Update-OllamaModels {
                 Write-Error "Failed to update model $model. Error: $_" -ForegroundColor Red
             }
         }
-        Write-Host "`nAll models have been Upgray.`n" -ForegroundColor Cyan
+        Write-Host "`nAll models have been Upgrayedd.`n" -ForegroundColor Cyan
     } catch {
         Write-Error "An error occurred: $_" -ForegroundColor Red
     }
@@ -90,3 +90,4 @@ function Update-OllamaModels {
 
 # Call the function
 Update-OllamaModels -Confirm
+
